@@ -1,5 +1,6 @@
 ### BLACKJACK GAME ###
 import random
+import os
 
 suits = ("Diamonds","Hearts","Spades","Clubs")
 ranks = ("Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King","Ace")
@@ -72,10 +73,10 @@ class Hand:
         if new_cards.rank == 'Ace':
             self.aces += 1
 
-    def adjust_for_ace(self):
-        while self.total_hand_value >21 and self.aces:
-            self.value -= 10
-            self.aces -= 1
+    def adjust_for_ace(self): 
+        while self.total_hand_value > 21 and self.aces:
+            self.total_hand_value = self.total_hand_value - 10
+            self.aces = self.aces - 1
 
 def take_bet(balance): 
     bet = "Nil"
@@ -98,7 +99,8 @@ def hit(deck, hand):
             hitting = False
         elif hit_again.upper() == 'Y':
             player_one_hand.add_card(new_deck.deal_one())
-            print(f'The card delt to Player One was {player_one_hand.all_cards[-1]} \n Player one sum of cards: {player_one_hand.total_hand_value}. ')
+            player_one_hand.adjust_for_ace()
+            print(f'The card delt to Player One was {player_one_hand.all_cards[-1]} \nPlayer one sum of cards: {player_one_hand.total_hand_value}. ')
             if player_one_hand.total_hand_value > 21:
                 print("BUST!!")
                 hitting = False
@@ -123,6 +125,9 @@ def player_wins(bet):
 def push(): 
     print("Push, your money has been returned. ")
 
+def clear():
+    os.system('cls' if os.name=='nt' else 'clear')
+
 ###create and shuffle new deck
 new_deck = Deck()
 new_deck.shuffle()
@@ -136,7 +141,7 @@ while game_on:
     betting = True
     while betting:
         new_bet = take_bet(balance.total)
-        print(f'The amount bet was {new_bet}, type {type(new_bet)}')
+        print(f'The amount bet was {new_bet}.')
 
         ### Create new hands for dealer and player
         player_one_hand = Hand()
@@ -162,6 +167,7 @@ while game_on:
             # Dealer draws cards up until 17 or going bust.
             while dealer.total_hand_value < 17:
                 dealer.add_card(new_deck.deal_one())
+                dealer.adjust_for_ace()
                 print(f"The dealer drew a {dealer.all_cards[-1]}")
                 print(f"The dealers hand is worth {dealer.total_hand_value}")
 
@@ -199,12 +205,17 @@ while game_on:
     if len(new_deck.all_cards) < 20:
         new_deck = Deck()
         new_deck.shuffle()
-
+        print("The deck has been reshuffled. ")
+    
 	#PLAY ON
     play_on = input("Do you want to play on? (Y or N) ")
     if play_on.upper() == "N":
+        # clear the screen
+        clear()
         game_on = False
     elif play_on.upper() == "Y":
+        # clear the screen
+        clear()
         continue
     else:
         print("That was not Y or N. ")
