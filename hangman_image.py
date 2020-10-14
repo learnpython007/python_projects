@@ -1,4 +1,3 @@
-
 def wrong(num):
 	if num == 10:
 		print()

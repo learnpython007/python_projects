@@ -30,15 +30,15 @@ class Hand:
     
     def __init__(self,word):
         self.word = word
-        self.letters = ['']
+        self.letters = []
         self.incorrect = 0
 
     def new_guess(self):
-        guess = '0'
+        guess = ''
         acceptable_guess = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         
         while guess not in acceptable_guess or len(guess) != 1:
-            guess = input("What letter would you like to try? ").upper()
+            guess = input("Please enter your next guess: ").upper()
         
         #if already in letters list (already guessed letter)
         if guess in self.letters:
@@ -58,11 +58,14 @@ class Hand:
 
     def reveal_letters(self):
         print()
+        text = ''
         for l in self.word:
             if l not in self.letters:
-                print("_ ")
+                text += ("_ ")
             else:
-                print(l + " ")
+                text += (l + " ")
+        print(text)
+        print()
 
 def game_over(incorrect):
     if incorrect == 10:
@@ -73,10 +76,13 @@ def game_over(incorrect):
         print(player_hand.reveal_letters())
         return True
 
-def game_win(letters, word):
-    if letters == word:
-        return True
-
+def game_win(letters, word): ### not working correctly
+    for w in word: ### showing true as soon as first letter is found, so winning early
+        if w in letters:
+            print(player_hand.word)
+            return True
+        else:
+        	return False
 
 def clear():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -91,6 +97,7 @@ while game_on:
 
     game_word = new_game()
     player_hand = Hand(game_word)
+    print(game_word)
     
     #While loop for playing current game
     this_game = True
@@ -103,13 +110,26 @@ while game_on:
         print(hangman_image.wrong(player_hand.incorrect))
         #show incorrect guesses and letters that have been used
         print(player_hand.incorrect,"wrong guesses, letters that have already been guessed are", player_hand.letters)
-
+        #check for game win
+        if game_win(player_hand.letters, player_hand.word):
+            this_game = False
+            print("WINNER!! You have won, well done!!")
         #check if the game is over
         if game_over(player_hand.incorrect):
-        	this_game = False
-        	print("ThE GaMe oVeR!!!!")
-    game_on = False
-    # add scrpit for game on to play again
+            this_game = False
+            print("ThE GaMe oVeR!!!!")
+
+
+    again = ''
+    if again not in ('Y','N'):
+        again = input("Do you want to play again? (Y or N) ").upper()
+        if again == 'Y':
+            game_on = True
+        elif again == 'N':
+            game_on = False
+        else:
+            print("That was not a good answer... ")
+    
 
 
 
