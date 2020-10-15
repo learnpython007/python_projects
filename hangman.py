@@ -15,13 +15,13 @@ print("|         / \\")
 print("|")
 print("|_____________")
 print()
-print("This is a small bit about how the game will play... blah blah blah")
+print("Select a letter to begin. Follow all on screen prompts for game play. ")
 
 file = open('word_list.txt','r')
 word_list = []
 
 for words in file:
-    word_list.append(words)
+    word_list.append(words.strip())
 
 def new_game():
     return word_list[random.randrange(len(word_list))].upper()
@@ -61,7 +61,7 @@ class Hand:
         text = ''
         for l in self.word:
             if l not in self.letters:
-                text += ("_ ")
+                text += ("* ")
             else:
                 text += (l + " ")
         print(text)
@@ -70,68 +70,62 @@ class Hand:
 def game_over(incorrect):
     if incorrect == 10:
         clear()
-        print(hangman_image.wrong(10))
+        hangman_image.wrong(10)
         print("GAME OVER")
         print(f"The word was: {player_hand.word}")
-        print(player_hand.reveal_letters())
+        player_hand.reveal_letters()
         return True
 
-def game_win(letters, word): ### not working correctly
-    for w in word: ### showing true as soon as first letter is found, so winning early
-        if w in letters:
-            print(player_hand.word)
-            return True
-        else:
-        	return False
+def game_win(letters, word):
+    length = len(word)
+    correct = 0
+    for w in word:
+    	if w in letters:
+    		correct += 1
+    if length == correct:
+    	player_hand.reveal_letters()
+    	print("WINNER!! You have won, well done!!")
+    	return True
 
 def clear():
     os.system('cls' if os.name=='nt' else 'clear')
 
 
 ### GAME PLAY ###
-#New game conditions
-
 game_on = True
 
 while game_on:
-
+    #New game conditions
     game_word = new_game()
     player_hand = Hand(game_word)
-    print(game_word)
+
+    print(player_hand.word)
     
     #While loop for playing current game
     this_game = True
     while this_game:
         #show the blanks or letters of the word
-        print(player_hand.reveal_letters())
+        player_hand.reveal_letters()
         #player takes a new guess
         player_hand.new_guess()
         #show the new hangman board
-        print(hangman_image.wrong(player_hand.incorrect))
+        hangman_image.wrong(player_hand.incorrect)
         #show incorrect guesses and letters that have been used
         print(player_hand.incorrect,"wrong guesses, letters that have already been guessed are", player_hand.letters)
         #check for game win
         if game_win(player_hand.letters, player_hand.word):
             this_game = False
-            print("WINNER!! You have won, well done!!")
         #check if the game is over
         if game_over(player_hand.incorrect):
             this_game = False
-            print("ThE GaMe oVeR!!!!")
 
-
+    #See if player wants to play another game
     again = ''
-    if again not in ('Y','N'):
+    while again not in ('Y','N'):
         again = input("Do you want to play again? (Y or N) ").upper()
         if again == 'Y':
+            clear()
+            print("*** NEW GAME ***")
             game_on = True
-        elif again == 'N':
-            game_on = False
         else:
-            print("That was not a good answer... ")
-    
-
-
-
-
-
+            game_on = False
