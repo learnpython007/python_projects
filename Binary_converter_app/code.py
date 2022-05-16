@@ -24,8 +24,6 @@ def binary_call(value):
                     second.append(int(num))
             else:
                 error = 1
-        print(first)
-        print(second)
         
         count = 0
         for x in binary:
@@ -36,7 +34,6 @@ def binary_call(value):
                 count = count + 1
             else:
                 error = 1
-        print(decimal)
         
         z = 0
         for x in first:
@@ -45,8 +42,6 @@ def binary_call(value):
                 z = z + 1
             elif x == 0:
                 z = z + 1
-        print("first",z)
-        print(first_val)
         z = 0
         for x in second:
             if x == 1:
@@ -54,9 +49,8 @@ def binary_call(value):
                 z = z + 1
             elif x == 0:
                 z = z + 1
-        print("second",z)
-        print(second_val)
-        return(decimal,hexi.get(first_val),hexi.get(second_val),error)
+        print(decimal,hexi.get(first_val),hexi.get(second_val),error)
+        return decimal,hexi.get(first_val),hexi.get(second_val),error
 
 
 
@@ -109,7 +103,7 @@ def decimal_call(value):
                 hex1 = value
             if second_val == key:
                 hex2 = value
-            
+        print(binary,hex1,hex2,error)    
         return(binary,hex1,hex2,error)
 
 
@@ -132,6 +126,9 @@ def hexidecimal_call(value):
     try:
         hex1 = hex_input[0]
         hex2 = hex_input[1]
+        
+        if len(hex_input) != 2:
+            error = 1
     
         z = 0
         for x in hex_values:
@@ -164,5 +161,5 @@ def hexidecimal_call(value):
         print(decimal)
     except:
         error = 1
-    
+    print(binary, decimal, error)
     return(binary, decimal, error)
