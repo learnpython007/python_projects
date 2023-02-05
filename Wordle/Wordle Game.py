@@ -64,7 +64,7 @@ def board():
             break
         elif counter == 5:
             print("\nGame over, out of turns! ")
-            print(f"The word was {word}, fool!! ")
+            print(f"The word was {word}!! ")
             break
 
 
@@ -78,6 +78,6 @@ while play:
         print("\nThanks for playing! ")
         break
     else:
-        print("\nThink you're tough enough, eh? ")
+        print("\nThink you're tough enough? ")
     # clear the old game
     os.system("cls")
